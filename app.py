@@ -26,6 +26,8 @@ anomaly_protocol_encoder = joblib.load(
 # =============================
 # Streamlit UI setup
 # =============================
+
+# REVIEW: Consider modularizing imports for better maintainability.
 st.set_page_config(page_title="AI SOC Dashboard", layout="wide")
 st.markdown(
     """
@@ -42,6 +44,8 @@ st.markdown(
 # Main dashboard title
 st.title("🛡️ AI Cybersecurity SOC Dashboard")
 st.markdown(
+
+# NOTE: All models are loaded at startup. Consider lazy loading for performance.
     "<span class='big-font'>Real-Time Network Attack Detection & Monitoring</span>",
     unsafe_allow_html=True,
 )
@@ -58,6 +62,8 @@ interval = st.sidebar.slider(
 )  # Time interval between events
 attack_ratio = st.sidebar.slider(
     "Attack Ratio", 0.01, 0.5, 0.08, 0.01
+
+# REVIEW: Custom CSS is injected for UI enhancement. Consider externalizing styles.
 )  # Ratio of attacks in simulation
 
 # Sidebar status indicators
@@ -65,6 +71,8 @@ st.sidebar.header("Status Indicators")
 status_placeholder = st.sidebar.empty()
 
 # =============================
+
+# SUGGESTION: Add a subtitle for more context.
 # Feature columns for models
 # =============================
 feature_cols = [
@@ -79,10 +87,14 @@ feature_cols = [
 
 # =============================
 # Placeholders for live graphs and alerts
+
+# REVIEW: Sidebar controls are clear. Consider grouping related controls.
 # =============================
 event_log = []  # Stores all events for session
 attack_count = 0  # Counter for detected attacks
 normal_count = 0  # Counter for normal events
+
+# NOTE: Placeholder for dynamic status updates.
 alert_placeholder = st.empty()  # For alert messages
 chart_placeholder = st.empty()  # For live chart
 pie_placeholder = st.empty()  # For pie chart
@@ -96,6 +108,8 @@ def simulate_event():
     """
     Simulate a single network event with realistic feature values.
     Returns a dictionary representing the event.
+
+# REVIEW: Feature columns should match model training features.
     """
     protocol = np.random.choice(
         ["TCP", "UDP", "ICMP"], p=[0.7, 0.25, 0.05]
@@ -128,6 +142,8 @@ def simulate_event():
         "source_port": source_port,
         "destination_port": destination_port,
         "failed_login_attempts": failed_login_attempts,
+
+    # REVIEW: Consider parameterizing port selection probabilities.
         "request_rate_per_second": request_rate_per_second,
     }
 
@@ -152,6 +168,8 @@ def hybrid_predict(event):
             safe_proto.append("TCP")  # Default to TCP if unseen
     adf["protocol_type"] = safe_proto
     adf["protocol_type"] = anomaly_protocol_encoder.transform(adf["protocol_type"])
+
+    # NOTE: Source port is often ephemeral in real traffic.
     X_a = adf[feature_cols]
     X_a_scaled = anomaly_scaler.transform(X_a)
     anomaly_score = anomaly_detector.decision_function(X_a_scaled)[0]
