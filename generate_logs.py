@@ -1,9 +1,6 @@
 import pandas as pd  # Data manipulation
 import random  # Random number generation
 
-import pandas as pd  # Data manipulation
-import random  # Random number generation
-
 
 # =============================
 # Function to generate synthetic network log data
@@ -36,7 +33,10 @@ def generate_data(samples=1000):
     print("Dataset generated successfully!")
 
 
-# =============================
-# Main execution
+if __name__ == "__main__":
+    # =============================
+    # Main execution
+    # =============================
+    generate_data()
 # =============================
 generate_data()
