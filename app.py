@@ -44,8 +44,7 @@ st.markdown(
 # Main dashboard title
 st.title("🛡️ AI Cybersecurity SOC Dashboard")
 st.markdown(
-
-# NOTE: All models are loaded at startup. Consider lazy loading for performance.
+    # NOTE: All models are loaded at startup. Consider lazy loading for performance.
     "<span class='big-font'>Real-Time Network Attack Detection & Monitoring</span>",
     unsafe_allow_html=True,
 )
@@ -61,9 +60,12 @@ interval = st.sidebar.slider(
     "Interval (sec)", 0.1, 2.0, 1.0, 0.1
 )  # Time interval between events
 attack_ratio = st.sidebar.slider(
-    "Attack Ratio", 0.01, 0.5, 0.08, 0.01
-
-# REVIEW: Custom CSS is injected for UI enhancement. Consider externalizing styles.
+    "Attack Ratio",
+    0.01,
+    0.5,
+    0.08,
+    0.01,
+    # REVIEW: Custom CSS is injected for UI enhancement. Consider externalizing styles.
 )  # Ratio of attacks in simulation
 
 # Sidebar status indicators
@@ -106,10 +108,10 @@ table_placeholder = st.empty()  # For event table
 # =============================
 def simulate_event():
     """
-    Simulate a single network event with realistic feature values.
-    Returns a dictionary representing the event.
+        Simulate a single network event with realistic feature values.
+        Returns a dictionary representing the event.
 
-# REVIEW: Feature columns should match model training features.
+    # REVIEW: Feature columns should match model training features.
     """
     protocol = np.random.choice(
         ["TCP", "UDP", "ICMP"], p=[0.7, 0.25, 0.05]
@@ -142,8 +144,7 @@ def simulate_event():
         "source_port": source_port,
         "destination_port": destination_port,
         "failed_login_attempts": failed_login_attempts,
-
-    # REVIEW: Consider parameterizing port selection probabilities.
+        # REVIEW: Consider parameterizing port selection probabilities.
         "request_rate_per_second": request_rate_per_second,
     }
 
@@ -228,7 +229,7 @@ if st.button("Start Live Monitoring", type="primary"):
             color="detected",
             title="Attack Probability Over Time",
         )
-        chart_placeholder.plotly_chart(chart, use_container_width=True)
+        chart_placeholder.plotly_chart(chart, width="stretch")
 
         # Pie chart (attack vs normal)
         pie = px.pie(
@@ -238,10 +239,10 @@ if st.button("Start Live Monitoring", type="primary"):
             color_discrete_map={"Attack": "red", "Normal": "green"},
             title="Traffic Distribution",
         )
-        pie_placeholder.plotly_chart(pie, use_container_width=True)
+        pie_placeholder.plotly_chart(pie, width="stretch")
 
         # Table of last 10 events (no cell coloring for compatibility)
-        table_placeholder.dataframe(df_chart.tail(10), use_container_width=True)
+        table_placeholder.dataframe(df_chart.tail(10), width="stretch")
 
         time.sleep(interval)
 
